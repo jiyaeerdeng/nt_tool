@@ -14,11 +14,21 @@ def filter_airbounds(airbounds: List[AirBound], airbound_filter: AirBoundFilter)
         if len(airbound_filter.airline_include) == 0:
             bool_list.append(True)
         else:
-            bool_list.append(any([x.upper() in ab.flight_codes for x in airbound_filter.airline_include]))
+            bool_list.append(
+                any(
+                    x.upper() in ab.flight_codes
+                    for x in airbound_filter.airline_include
+                )
+            )
         if len(airbound_filter.airline_exclude) == 0:
             bool_list.append(True)
         else:
-            bool_list.append(not any([x.upper() in ab.flight_codes for x in airbound_filter.airline_exclude]))
+            bool_list.append(
+                all(
+                    x.upper() not in ab.flight_codes
+                    for x in airbound_filter.airline_exclude
+                )
+            )
         if all(bool_list):
             result.append(ab)
     return result

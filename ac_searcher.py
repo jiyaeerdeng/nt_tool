@@ -139,8 +139,7 @@ class Ac_Searcher():
                 }
             ]
         }
-        response = requests.post(url, headers=headers, json=data, auth=self.get_auth())
-        return response
+        return requests.post(url, headers=headers, json=data, auth=self.get_auth())
 
     def search_for(self, ori: str, des: str, date: str, cabin_class=None):
         if cabin_class is None:
@@ -159,8 +158,7 @@ class Ac_Searcher():
         ac_searcher_cabin_class = [ac_searcher_cabin_class_dict[x] for x in cabin_class]
         try:
             self.get_market_token(ori, des, date)
-            r1 = self.get_air_bounds(ori, des, date, ac_searcher_cabin_class)
-            return r1
+            return self.get_air_bounds(ori, des, date, ac_searcher_cabin_class)
         except:
             # TODO: add log
             r1 = requests.Response
