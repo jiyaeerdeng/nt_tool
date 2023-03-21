@@ -15,10 +15,7 @@ def convert_datetime(origin: datetime) -> str:
 
 
 def convert_timedelta(td: Union[timedelta, float]) -> str:
-    if type(td) == timedelta:
-        seconds = td.total_seconds()
-    else:
-        seconds = td
+    seconds = td.total_seconds() if type(td) == timedelta else td
     hour = int(seconds / 3600)
     minute = int(seconds / 60 % 60)
     return f'{hour}h{minute}m'
@@ -160,13 +157,13 @@ class AirBound(BaseModel):
 
     @computed('from_to')
     def calculate_from_to(segments: List[Segment], **kwargs):
-        result = segments[0].departure + '-' + segments[0].arrival
+        result = f'{segments[0].departure}-{segments[0].arrival}'
         if len(segments) > 1:
             for x in range(1, len(segments)):
                 if segments[x - 1].arrival == segments[x].departure:
-                    result = result + '-' + segments[x].arrival
+                    result = f'{result}-{segments[x].arrival}'
                 else:
-                    result = result + ',' + segments[x].departure + '-' + segments[x].arrival
+                    result = f'{result},{segments[x].departure}-{segments[x].arrival}'
         return result
 
     excl_departure_time: Computed[datetime] = Optional
